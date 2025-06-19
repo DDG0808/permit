@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <!-- 响应式文字测试 */
+    <!-- 响应式文字测试 -->
     <div class="test-section">
       <h2 class="section-title">响应式文字测试</h2>
       <div class="text-test">
@@ -74,7 +74,7 @@
       </div>
     </div>
 
-    <!-- 响应式按钮测试 */
+    <!-- 响应式按钮测试 -->
     <div class="test-section">
       <h2 class="section-title">响应式按钮测试</h2>
       <div class="button-test">
@@ -100,7 +100,7 @@
       </div>
     </div>
 
-    <!-- 响应式表单测试 */
+    <!-- 响应式表单测试 -->
     <div class="test-section">
       <h2 class="section-title">响应式表单测试</h2>
       <div class="form-test">
@@ -138,7 +138,7 @@
       </div>
     </div>
 
-    <!-- 响应式卡片测试 */
+    <!-- 响应式卡片测试 -->
     <div class="test-section">
       <h2 class="section-title">响应式卡片测试</h2>
       <div class="card-test">
@@ -165,7 +165,7 @@
       </div>
     </div>
 
-    <!-- 移动端导航测试 */
+    <!-- 移动端导航测试 -->
     <div class="test-section mobile-block desktop-hidden">
       <h2 class="section-title">移动端导航测试</h2>
       <div class="mobile-nav-test">
