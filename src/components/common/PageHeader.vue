@@ -45,7 +45,7 @@
       <div class="actions-section">
         <div class="action-group">
           <a
-            href="https://github.com/your-username/open-source-license-helper"
+            href="https://github.com/DDG0808/permit?tab=readme-ov-file"
             target="_blank"
             class="github-link"
             title="查看源码"
@@ -113,7 +113,7 @@
           <div class="mobile-footer">
             <div class="mobile-actions">
               <a
-                href="https://github.com/your-username/open-source-license-helper"
+                href="https://github.com/DDG0808/permit?tab=readme-ov-file"
                 target="_blank"
                 class="mobile-github"
               >
