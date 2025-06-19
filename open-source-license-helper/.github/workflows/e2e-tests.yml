@@ -1,0 +1,348 @@
+name: End-to-End Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # 每天凌晨2点运行完整测试套件
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: '测试类型'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+          - smoke
+          - e2e
+          - visual
+          - accessibility
+          - performance
+          - cross-browser
+          - all
+      browser:
+        description: '浏览器'
+        required: true
+        default: 'chromium'
+        type: choice
+        options:
+          - chromium
+          - firefox
+          - webkit
+          - all
+
+jobs:
+  # 冒烟测试 - 快速验证
+  smoke-test:
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        
+      - name: Build application
+        run: npm run build
+        
+      - name: Start application
+        run: npm run preview &
+        
+      - name: Wait for application
+        run: npx wait-on http://localhost:4173 --timeout 60000
+        
+      - name: Run smoke tests
+        run: npx playwright test --grep @smoke --project=chromium
+        
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-results
+          path: test-results/
+          retention-days: 7
+
+  # 完整端到端测试
+  e2e-test:
+    if: github.event_name == 'schedule' || github.event.inputs.test_type == 'e2e' || github.event.inputs.test_type == 'all'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+        
+      - name: Build application
+        run: npm run build
+        
+      - name: Start application
+        run: npm run preview &
+        
+      - name: Wait for application
+        run: npx wait-on http://localhost:4173 --timeout 60000
+        
+      - name: Run E2E tests
+        run: npx playwright test --project=${{ matrix.browser }}
+        
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-test-results-${{ matrix.browser }}
+          path: test-results/
+          retention-days: 30
+
+  # 视觉回归测试
+  visual-test:
+    if: github.event.inputs.test_type == 'visual' || github.event.inputs.test_type == 'all'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        
+      - name: Build application
+        run: npm run build
+        
+      - name: Start application
+        run: npm run preview &
+        
+      - name: Wait for application
+        run: npx wait-on http://localhost:4173 --timeout 60000
+        
+      - name: Run visual tests
+        run: npx playwright test --grep @visual --project=chromium
+        
+      - name: Upload visual diff
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diff
+          path: test-results/
+          retention-days: 30
+
+  # 无障碍访问测试
+  accessibility-test:
+    if: github.event.inputs.test_type == 'accessibility' || github.event.inputs.test_type == 'all'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        
+      - name: Build application
+        run: npm run build
+        
+      - name: Start application
+        run: npm run preview &
+        
+      - name: Wait for application
+        run: npx wait-on http://localhost:4173 --timeout 60000
+        
+      - name: Run accessibility tests
+        run: npx playwright test --grep @accessibility --project=chromium
+        
+      - name: Upload accessibility results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-test-results
+          path: test-results/
+          retention-days: 30
+
+  # 性能测试
+  performance-test:
+    if: github.event.inputs.test_type == 'performance' || github.event.inputs.test_type == 'all'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        
+      - name: Build application
+        run: npm run build
+        
+      - name: Start application
+        run: npm run preview &
+        
+      - name: Wait for application
+        run: npx wait-on http://localhost:4173 --timeout 60000
+        
+      - name: Run performance tests
+        run: npx playwright test --grep @performance --project=chromium
+        
+      - name: Upload performance results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-test-results
+          path: test-results/
+          retention-days: 30
+
+  # 移动端测试
+  mobile-test:
+    if: github.event_name == 'schedule' || github.event.inputs.test_type == 'all'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        device: ['Mobile Chrome', 'Mobile Safari']
+        
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+        
+      - name: Build application
+        run: npm run build
+        
+      - name: Start application
+        run: npm run preview &
+        
+      - name: Wait for application
+        run: npx wait-on http://localhost:4173 --timeout 60000
+        
+      - name: Run mobile tests
+        run: npx playwright test --project="${{ matrix.device }}"
+        
+      - name: Upload mobile test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-test-results-${{ matrix.device }}
+          path: test-results/
+          retention-days: 30
+
+  # 测试报告汇总
+  test-report:
+    if: always()
+    needs: [smoke-test, e2e-test, visual-test, accessibility-test, performance-test, mobile-test]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-test-results
+          
+      - name: Generate test summary
+        run: |
+          echo "# 测试结果摘要" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 测试执行情况" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ -d "all-test-results/smoke-test-results" ]; then
+            echo "- ✅ 冒烟测试: 已执行" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ 冒烟测试: 失败或跳过" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ -d "all-test-results/e2e-test-results-chromium" ]; then
+            echo "- ✅ 端到端测试: 已执行" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ 端到端测试: 失败或跳过" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ -d "all-test-results/visual-diff" ]; then
+            echo "- ⚠️ 视觉回归测试: 发现差异" >> $GITHUB_STEP_SUMMARY
+          elif [ -d "all-test-results" ] && find all-test-results -name "*visual*" -type d | grep -q .; then
+            echo "- ✅ 视觉回归测试: 通过" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 测试覆盖范围" >> $GITHUB_STEP_SUMMARY
+          echo "- 🌐 跨浏览器测试 (Chrome, Firefox, Safari)" >> $GITHUB_STEP_SUMMARY
+          echo "- 📱 移动端测试 (iOS, Android)" >> $GITHUB_STEP_SUMMARY
+          echo "- ♿ 无障碍访问测试" >> $GITHUB_STEP_SUMMARY
+          echo "- 🚀 性能测试" >> $GITHUB_STEP_SUMMARY
+          echo "- 👁️ 视觉回归测试" >> $GITHUB_STEP_SUMMARY
+          
+      - name: Upload consolidated results
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-test-results
+          path: all-test-results/
+          retention-days: 90

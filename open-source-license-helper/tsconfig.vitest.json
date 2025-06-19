@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.app.json",
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue",
+    "src/**/*.test.*",
+    "src/**/*.spec.*",
+    "vitest.config.*"
+  ],
+  "exclude": [],
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.vitest.tsbuildinfo",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
+  }
+}

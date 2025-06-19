@@ -1,0 +1,180 @@
+/* 应用特定变量和兼容层 */
+
+:root {
+  /* ===== Naive UI 兼容层 ===== */
+  /* 将新设计系统的颜色映射到 Naive UI 变量 */
+  --primary-color: var(--color-primary);
+  --primary-color-hover: var(--color-primary-light);
+  --primary-color-pressed: var(--color-primary-dark);
+  --primary-color-suppl: var(--color-primary-light);
+
+  /* 辅助色彩映射 */
+  --info-color: var(--color-info);
+  --info-color-hover: var(--color-info-light);
+  --info-color-pressed: var(--color-info-dark);
+
+  --success-color: var(--color-success);
+  --success-color-hover: var(--color-success-light);
+  --success-color-pressed: var(--color-success-dark);
+
+  --warning-color: var(--color-warning);
+  --warning-color-hover: var(--color-warning-light);
+  --warning-color-pressed: var(--color-warning-dark);
+
+  --error-color: var(--color-error);
+  --error-color-hover: var(--color-error-light);
+  --error-color-pressed: var(--color-error-dark);
+
+  /* ===== 文本颜色映射 ===== */
+  --text-color-base: var(--color-text-primary);
+  --text-color-1: var(--color-text-primary);
+  --text-color-2: var(--color-text-secondary);
+  --text-color-3: var(--color-text-tertiary);
+  --text-color-disabled: var(--color-text-disabled);
+
+  --placeholder-color: var(--color-text-placeholder);
+  --placeholder-color-disabled: var(--color-text-disabled);
+
+  --icon-color: var(--color-text-secondary);
+  --icon-color-hover: var(--color-text-primary);
+  --icon-color-pressed: var(--color-text-tertiary);
+  --icon-color-disabled: var(--color-text-disabled);
+
+  /* ===== 背景色彩映射 ===== */
+  --body-color: var(--color-background-primary);
+  --card-color: var(--color-background-primary);
+  --modal-color: var(--color-background-primary);
+  --popover-color: var(--color-background-primary);
+
+  --base-color: var(--color-text-primary);
+  --base-color-hover: var(--color-text-secondary);
+  --base-color-pressed: var(--color-text-tertiary);
+
+  /* ===== 边框色彩映射 ===== */
+  --border-color: var(--color-border);
+  --divider-color: var(--color-separator-opaque);
+
+  /* ===== 表格色彩映射 ===== */
+  --table-header-color: var(--color-background-secondary);
+  --table-color-hover: var(--color-background-secondary);
+  --table-color-striped: var(--color-background-secondary);
+
+  /* ===== 输入框色彩映射 ===== */
+  --input-color: var(--color-background-primary);
+  --input-color-disabled: var(--color-background-secondary);
+
+  /* ===== 标签色彩映射 ===== */
+  --tag-color: var(--color-background-secondary);
+
+  /* ===== 滚动条色彩映射 ===== */
+  --scrollbar-color: var(--color-separator-non-opaque);
+  --scrollbar-color-hover: var(--color-separator-opaque);
+
+  /* ===== 阴影映射 ===== */
+  --box-shadow-1: var(--shadow-sm);
+  --box-shadow-2: var(--shadow-md);
+  --box-shadow-3: var(--shadow-lg);
+
+  /* ===== 字体映射 ===== */
+  --font-family: var(--font-family-system);
+  --font-family-mono: var(--font-family-mono);
+
+  /* ===== 字体大小映射 ===== */
+  --font-size-tiny: var(--font-size-xs);
+  --font-size-small: var(--font-size-sm);
+  --font-size-medium: var(--font-size-base);
+  --font-size-large: var(--font-size-lg);
+  --font-size-huge: var(--font-size-xl);
+
+  /* ===== 行高映射 ===== */
+  --line-height-tiny: var(--line-height-tight);
+  --line-height-small: var(--line-height-snug);
+  --line-height-medium: var(--line-height-normal);
+  --line-height-large: var(--line-height-relaxed);
+  --line-height-huge: var(--line-height-loose);
+
+  /* ===== 圆角映射 ===== */
+  --border-radius-small: var(--radius-sm);
+  --border-radius-medium: var(--radius-md);
+  --border-radius-large: var(--radius-lg);
+
+  /* ===== 间距映射 ===== */
+  --space-tiny: var(--spacing-1);
+  --space-small: var(--spacing-2);
+  --space-medium: var(--spacing-3);
+  --space-large: var(--spacing-4);
+  --space-huge: var(--spacing-5);
+
+  /* ===== 高度映射 ===== */
+  --height-tiny: 22px;
+  --height-small: 28px;
+  --height-medium: 34px;
+  --height-large: 40px;
+  --height-huge: 46px;
+
+  /* ===== 动画映射 ===== */
+  --cubic-bezier-ease-in-out: var(--ease-in-out);
+  --cubic-bezier-ease-out: var(--ease-out);
+  --cubic-bezier-ease-in: var(--ease-in);
+
+  /* ===== 过渡时间映射 ===== */
+  --transition-duration-fast: var(--duration-150);
+  --transition-duration-medium: var(--duration-300);
+  --transition-duration-slow: var(--duration-500);
+
+  /* ===== Z-index层级映射 ===== */
+  --z-index-base: var(--z-index-base);
+  --z-index-auto: var(--z-index-auto);
+  --z-index-popper: var(--z-index-popover);
+  --z-index-modal: var(--z-index-modal);
+  --z-index-message: var(--z-index-toast);
+  --z-index-notification: var(--z-index-toast);
+}
+
+/* ===== 深色主题兼容层 ===== */
+[data-theme="dark"] {
+  /* 深色主题下的颜色映射会自动从新设计系统继承 */
+  /* 这里只需要保留一些特殊的兼容性映射 */
+
+  /* 表格色彩 */
+  --table-header-color: var(--color-background-secondary);
+  --table-color-hover: var(--color-background-secondary);
+  --table-color-striped: var(--color-background-secondary);
+
+  /* 输入框色彩 */
+  --input-color: var(--color-background-primary);
+  --input-color-disabled: var(--color-background-secondary);
+
+  /* 标签色彩 */
+  --tag-color: var(--color-background-secondary);
+}
+
+/* ===== 应用特定变量 ===== */
+:root {
+  /* 应用特定颜色别名 */
+  --app-primary: var(--color-primary);
+  --app-secondary: var(--color-info);
+  --app-accent: var(--color-warning);
+
+  /* 应用特定渐变（保留现有的，因为它们是应用特有的） */
+  --gradient-primary: var(--bg-gradient-primary);
+  --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-card: linear-gradient(135deg, var(--color-background-secondary) 0%, var(--color-background-primary) 100%);
+
+  /* 特殊效果映射到新设计系统 */
+  --backdrop-blur: var(--glass-backdrop-filter);
+  --glass-background: var(--glass-background);
+  --glass-border: var(--glass-border);
+}
+
+/* ===== 应用特定的媒体查询 ===== */
+/* 打印样式变量 - 保留应用特定的打印样式 */
+@media print {
+  :root {
+    /* 打印时使用高对比度 */
+    --primary-color: var(--color-primary-dark);
+    --app-primary: var(--color-primary-dark);
+  }
+}
+
+/* 注意：高对比度模式和减少动画模式已在新设计系统中定义 */

@@ -1,0 +1,370 @@
+/* 移动端专项优化样式 - Apple Design Award标准 */
+
+/* ===== 移动端基础优化 ===== */
+
+/* iOS Safari优化 */
+@supports (-webkit-touch-callout: none) {
+  .ios-safe-area {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  
+  .ios-safe-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .ios-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* 移动端视口优化 */
+@media (max-width: 767px) {
+  /* 防止横向滚动 */
+  .mobile-no-scroll {
+    overflow-x: hidden;
+    max-width: 100vw;
+  }
+  
+  /* 移动端容器优化 */
+  .mobile-container {
+    width: 100%;
+    max-width: 100vw;
+    padding-left: var(--spacing-4);
+    padding-right: var(--spacing-4);
+    margin: 0 auto;
+  }
+  
+  /* 移动端卡片优化 */
+  .mobile-card {
+    margin: var(--spacing-3) 0;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    background: var(--color-background-primary);
+  }
+  
+  .mobile-card-compact {
+    padding: var(--spacing-4);
+    margin: var(--spacing-2) 0;
+  }
+  
+  /* 移动端按钮优化 */
+  .mobile-button {
+    min-height: 44px;
+    padding: var(--spacing-3) var(--spacing-4);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    transition: all var(--duration-200) var(--ease-out);
+  }
+  
+  .mobile-button-large {
+    min-height: 48px;
+    padding: var(--spacing-4) var(--spacing-6);
+    font-size: var(--font-size-lg);
+  }
+  
+  .mobile-button-full {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  /* 移动端输入框优化 */
+  .mobile-input {
+    min-height: 44px;
+    padding: var(--spacing-3) var(--spacing-4);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-base);
+    border: 1px solid var(--color-border);
+    background: var(--color-background-primary);
+  }
+  
+  .mobile-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-alpha-20);
+  }
+  
+  /* 移动端导航优化 */
+  .mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--glass-background-strong);
+    backdrop-filter: var(--glass-backdrop-filter);
+    -webkit-backdrop-filter: var(--glass-backdrop-filter);
+    border-top: 1px solid var(--color-border);
+    padding: var(--spacing-2) var(--spacing-4);
+    z-index: var(--z-index-sticky);
+  }
+  
+  .mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-1);
+    padding: var(--spacing-2);
+    border-radius: var(--radius-md);
+    min-height: 44px;
+    min-width: 44px;
+    transition: all var(--duration-200) var(--ease-out);
+  }
+  
+  .mobile-nav-item:active {
+    background: var(--color-primary-alpha-10);
+    transform: scale(0.95);
+  }
+  
+  /* 移动端模态框优化 */
+  .mobile-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-background-primary);
+    z-index: var(--z-index-modal);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .mobile-modal-header {
+    position: sticky;
+    top: 0;
+    background: var(--glass-background-strong);
+    backdrop-filter: var(--glass-backdrop-filter);
+    -webkit-backdrop-filter: var(--glass-backdrop-filter);
+    border-bottom: 1px solid var(--color-border);
+    padding: var(--spacing-4);
+    z-index: 1;
+  }
+  
+  .mobile-modal-content {
+    padding: var(--spacing-4);
+    min-height: calc(100vh - 120px);
+  }
+  
+  /* 移动端列表优化 */
+  .mobile-list {
+    background: var(--color-background-primary);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin: var(--spacing-3) 0;
+  }
+  
+  .mobile-list-item {
+    padding: var(--spacing-4);
+    border-bottom: 1px solid var(--color-separator-non-opaque);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    transition: background-color var(--duration-200) var(--ease-out);
+  }
+  
+  .mobile-list-item:last-child {
+    border-bottom: none;
+  }
+  
+  .mobile-list-item:active {
+    background: var(--color-background-secondary);
+  }
+  
+  /* 移动端表单优化 */
+  .mobile-form {
+    padding: var(--spacing-4);
+  }
+  
+  .mobile-form-group {
+    margin-bottom: var(--spacing-4);
+  }
+  
+  .mobile-form-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-2);
+  }
+  
+  .mobile-form-input {
+    width: 100%;
+    min-height: 44px;
+    padding: var(--spacing-3) var(--spacing-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-base);
+    background: var(--color-background-primary);
+    transition: all var(--duration-200) var(--ease-out);
+  }
+  
+  .mobile-form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-alpha-20);
+  }
+  
+  .mobile-form-textarea {
+    min-height: 88px;
+    resize: vertical;
+  }
+  
+  /* 移动端网格优化 */
+  .mobile-grid {
+    display: grid;
+    gap: var(--spacing-3);
+    padding: var(--spacing-4);
+  }
+  
+  .mobile-grid-1 { grid-template-columns: 1fr; }
+  .mobile-grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .mobile-grid-auto { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  
+  /* 移动端间距优化 */
+  .mobile-section {
+    padding: var(--spacing-6) var(--spacing-4);
+  }
+  
+  .mobile-section-compact {
+    padding: var(--spacing-4) var(--spacing-4);
+  }
+  
+  .mobile-divider {
+    height: 1px;
+    background: var(--color-separator-non-opaque);
+    margin: var(--spacing-4) 0;
+  }
+}
+
+/* ===== 小屏幕设备优化 ===== */
+@media (max-width: 480px) {
+  .small-mobile-container {
+    padding-left: var(--spacing-3);
+    padding-right: var(--spacing-3);
+  }
+  
+  .small-mobile-text {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+  }
+  
+  .small-mobile-button {
+    min-height: 40px;
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-sm);
+  }
+  
+  .small-mobile-input {
+    min-height: 40px;
+    padding: var(--spacing-2) var(--spacing-3);
+    font-size: var(--font-size-sm);
+  }
+  
+  .small-mobile-nav-item {
+    min-height: 40px;
+    min-width: 40px;
+    padding: var(--spacing-1);
+  }
+}
+
+/* ===== 横屏模式优化 ===== */
+@media (max-height: 500px) and (orientation: landscape) {
+  .landscape-compact {
+    padding-top: var(--spacing-2);
+    padding-bottom: var(--spacing-2);
+  }
+  
+  .landscape-nav {
+    position: static;
+    display: flex;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    padding: var(--spacing-2);
+  }
+  
+  .landscape-modal {
+    padding: var(--spacing-2);
+  }
+  
+  .landscape-section {
+    padding: var(--spacing-3) var(--spacing-4);
+  }
+}
+
+/* ===== 触摸优化 ===== */
+@media (hover: none) and (pointer: coarse) {
+  /* 增大触摸目标 */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    padding: var(--spacing-3);
+  }
+  
+  .touch-target-large {
+    min-height: 48px;
+    min-width: 48px;
+    padding: var(--spacing-4);
+  }
+  
+  /* 移除悬浮效果 */
+  .touch-no-hover {
+    transition: none;
+  }
+  
+  .touch-no-hover:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* 触摸反馈 */
+  .touch-feedback:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+    transition: all var(--duration-100) var(--ease-out);
+  }
+}
+
+/* ===== PWA优化 ===== */
+@media (display-mode: standalone) {
+  .pwa-header {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .pwa-content {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .pwa-nav {
+    padding-bottom: calc(var(--spacing-4) + env(safe-area-inset-bottom));
+  }
+}
+
+/* ===== 深色模式移动端优化 ===== */
+@media (max-width: 767px) {
+  [data-theme="dark"] .mobile-card {
+    background: var(--color-background-elevated);
+    border: 1px solid var(--color-border-secondary);
+  }
+  
+  [data-theme="dark"] .mobile-nav {
+    background: rgba(0, 0, 0, 0.8);
+    border-top-color: var(--color-border-secondary);
+  }
+  
+  [data-theme="dark"] .mobile-input {
+    background: var(--color-background-elevated);
+    border-color: var(--color-border-secondary);
+    color: var(--color-text-primary);
+  }
+  
+  [data-theme="dark"] .mobile-list {
+    background: var(--color-background-elevated);
+  }
+  
+  [data-theme="dark"] .mobile-list-item:active {
+    background: var(--color-background-secondary);
+  }
+}

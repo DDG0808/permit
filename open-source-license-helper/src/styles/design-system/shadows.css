@@ -1,0 +1,416 @@
+/* 现代化阴影和效果系统 - Apple风格视觉效果 */
+
+/* ===== 基础阴影类 ===== */
+.shadow-none {
+  box-shadow: none;
+}
+
+.shadow-xs {
+  box-shadow: var(--shadow-xs);
+}
+
+.shadow-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.shadow {
+  box-shadow: var(--shadow-base);
+}
+
+.shadow-md {
+  box-shadow: var(--shadow-md);
+}
+
+.shadow-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+.shadow-xl {
+  box-shadow: var(--shadow-xl);
+}
+
+.shadow-2xl {
+  box-shadow: var(--shadow-2xl);
+}
+
+.shadow-inner {
+  box-shadow: var(--shadow-inner);
+}
+
+/* ===== 玻璃拟态效果 ===== */
+.glass {
+  background: var(--glass-background);
+  backdrop-filter: var(--glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-glass);
+}
+
+.glass-strong {
+  background: var(--glass-background-strong);
+  backdrop-filter: var(--glass-backdrop-filter-strong);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter-strong);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-glass), var(--shadow-glass-inset);
+}
+
+.glass-subtle {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 深色主题下的玻璃效果 */
+[data-theme="dark"] .glass {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .glass-strong {
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .glass-subtle {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ===== 彩色阴影 ===== */
+.shadow-primary {
+  box-shadow: 0 10px 25px -5px rgba(0, 122, 255, 0.25), 0 8px 10px -6px rgba(0, 122, 255, 0.1);
+}
+
+.shadow-success {
+  box-shadow: 0 10px 25px -5px rgba(52, 199, 89, 0.25), 0 8px 10px -6px rgba(52, 199, 89, 0.1);
+}
+
+.shadow-warning {
+  box-shadow: 0 10px 25px -5px rgba(255, 149, 0, 0.25), 0 8px 10px -6px rgba(255, 149, 0, 0.1);
+}
+
+.shadow-error {
+  box-shadow: 0 10px 25px -5px rgba(255, 59, 48, 0.25), 0 8px 10px -6px rgba(255, 59, 48, 0.1);
+}
+
+/* ===== 发光效果 ===== */
+.glow-sm {
+  box-shadow: 0 0 5px rgba(0, 122, 255, 0.5);
+}
+
+.glow {
+  box-shadow: 0 0 10px rgba(0, 122, 255, 0.5);
+}
+
+.glow-lg {
+  box-shadow: 0 0 20px rgba(0, 122, 255, 0.5);
+}
+
+.glow-success {
+  box-shadow: 0 0 10px rgba(52, 199, 89, 0.5);
+}
+
+.glow-warning {
+  box-shadow: 0 0 10px rgba(255, 149, 0, 0.5);
+}
+
+.glow-error {
+  box-shadow: 0 0 10px rgba(255, 59, 48, 0.5);
+}
+
+/* ===== 边框效果 ===== */
+.border-glass {
+  border: 1px solid var(--glass-border);
+}
+
+.border-gradient {
+  border: 1px solid transparent;
+  background: linear-gradient(var(--color-background-primary), var(--color-background-primary)) padding-box,
+              linear-gradient(135deg, var(--color-primary), var(--color-primary-light)) border-box;
+}
+
+.border-shimmer {
+  position: relative;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.border-shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* ===== 浮动效果 ===== */
+.floating {
+  animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.floating-delayed {
+  animation: floating 3s ease-in-out infinite 1s;
+}
+
+/* ===== 脉冲效果 ===== */
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.pulse-ring {
+  position: relative;
+}
+
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 100%;
+  border: 2px solid var(--color-primary);
+  border-radius: inherit;
+  transform: translate(-50%, -50%);
+  animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0;
+  }
+}
+
+/* ===== 渐变背景 ===== */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+}
+
+.bg-gradient-success {
+  background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success-light) 100%);
+}
+
+.bg-gradient-warning {
+  background: linear-gradient(135deg, var(--color-warning) 0%, var(--color-warning-light) 100%);
+}
+
+.bg-gradient-error {
+  background: linear-gradient(135deg, var(--color-error) 0%, var(--color-error-light) 100%);
+}
+
+.bg-gradient-hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-sunset {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+}
+
+.bg-gradient-ocean {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-forest {
+  background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+}
+
+/* ===== 网格背景 ===== */
+.bg-grid {
+  background-image: 
+    linear-gradient(rgba(0, 122, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 122, 255, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.bg-dots {
+  background-image: radial-gradient(circle, rgba(0, 122, 255, 0.15) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* ===== 模糊效果 ===== */
+.blur-none {
+  filter: blur(0);
+}
+
+.blur-sm {
+  filter: blur(4px);
+}
+
+.blur {
+  filter: blur(8px);
+}
+
+.blur-lg {
+  filter: blur(16px);
+}
+
+.blur-xl {
+  filter: blur(24px);
+}
+
+.blur-2xl {
+  filter: blur(40px);
+}
+
+.blur-3xl {
+  filter: blur(64px);
+}
+
+/* ===== 亮度和对比度 ===== */
+.brightness-50 {
+  filter: brightness(0.5);
+}
+
+.brightness-75 {
+  filter: brightness(0.75);
+}
+
+.brightness-100 {
+  filter: brightness(1);
+}
+
+.brightness-125 {
+  filter: brightness(1.25);
+}
+
+.brightness-150 {
+  filter: brightness(1.5);
+}
+
+.contrast-50 {
+  filter: contrast(0.5);
+}
+
+.contrast-75 {
+  filter: contrast(0.75);
+}
+
+.contrast-100 {
+  filter: contrast(1);
+}
+
+.contrast-125 {
+  filter: contrast(1.25);
+}
+
+.contrast-150 {
+  filter: contrast(1.5);
+}
+
+/* ===== 饱和度 ===== */
+.saturate-0 {
+  filter: saturate(0);
+}
+
+.saturate-50 {
+  filter: saturate(0.5);
+}
+
+.saturate-100 {
+  filter: saturate(1);
+}
+
+.saturate-150 {
+  filter: saturate(1.5);
+}
+
+.saturate-200 {
+  filter: saturate(2);
+}
+
+/* ===== 组合效果 ===== */
+.glass-card {
+  background: var(--glass-background);
+  backdrop-filter: var(--glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg), var(--shadow-glass-inset);
+  transition: all var(--duration-300) var(--ease-out);
+}
+
+.glass-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl), var(--shadow-glass-inset);
+}
+
+.modern-card {
+  background: var(--color-background-primary);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-300) var(--ease-out);
+}
+
+.modern-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary-alpha-20);
+}
+
+/* ===== 响应式效果 ===== */
+@media (max-width: 768px) {
+  .glass,
+  .glass-strong,
+  .glass-subtle {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .glass-card:hover,
+  .modern-card:hover {
+    transform: none;
+  }
+}
+
+/* ===== 减少动画模式 ===== */
+@media (prefers-reduced-motion: reduce) {
+  .floating,
+  .floating-delayed,
+  .pulse,
+  .pulse-ring::before,
+  .border-shimmer::before {
+    animation: none;
+  }
+  
+  .glass-card,
+  .modern-card {
+    transition: none;
+  }
+}
