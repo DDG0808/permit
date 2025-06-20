@@ -76,9 +76,44 @@
 
         <!-- 操作按钮 -->
         <NSpace>
-          <NButton 
+          <NButton
             type="primary"
-            @click="$emit('download-license')"
+            @click="() => {
+              console.log('🔽 直接下载按钮被点击了！');
+              const mitTemplate = `MIT License
+
+Copyright (c) 2024 您的姓名
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the \"Software\"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.`;
+              const blob = new Blob([mitTemplate], { type: 'text/plain;charset=utf-8' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'LICENSE';
+              a.style.display = 'none';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+              console.log('✅ 下载完成！');
+              alert('许可证文件下载成功！');
+            }"
           >
             <template #icon>
               <NIcon><DownloadOutline /></NIcon>
@@ -243,8 +278,16 @@ const primaryLicense = computed(() => {
 })
 
 const scorePercentage = computed(() => {
-  const maxScore = 60 // 假设最高分为60分
-  return Math.min((props.result.recommendations.primary.score / maxScore) * 100, 100)
+  // 动态计算最高分，基于所有推荐结果中的最高分
+  const allScores = [
+    props.result.recommendations.primary.score,
+    ...props.result.recommendations.alternatives.map(alt => alt.score)
+  ]
+  const maxScore = Math.max(...allScores, 60) // 使用实际最高分，最低为60
+
+  // 确保百分比不超过100%
+  const percentage = (props.result.recommendations.primary.score / maxScore) * 100
+  return Math.min(Math.round(percentage), 100)
 })
 
 // 方法
@@ -281,6 +324,62 @@ const getLimitationLabel = (limitation: string): string => {
 
 const selectAlternative = (alternative: LicenseScore) => {
   emit('select-alternative', alternative)
+}
+
+// 处理下载许可证
+const handleDownloadLicense = () => {
+  console.log('🔽 ResultCard handleDownloadLicense 被调用了！')
+
+  try {
+    // 简化的MIT许可证模板
+    const mitTemplate = `MIT License
+
+Copyright (c) 2024 您的姓名
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.`
+
+    // 创建 Blob 对象
+    const blob = new Blob([mitTemplate], { type: 'text/plain;charset=utf-8' })
+
+    // 创建下载链接
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'LICENSE'
+    a.style.display = 'none'
+
+    // 触发下载
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+
+    // 清理 URL 对象
+    URL.revokeObjectURL(url)
+
+    console.log('✅ 下载成功！')
+    alert('许可证文件下载成功！')
+
+  } catch (error) {
+    console.error('❌ 下载失败:', error)
+    const errorMessage = error instanceof Error ? error.message : '未知错误'
+    alert(`下载失败: ${errorMessage}`)
+  }
 }
 </script>
 

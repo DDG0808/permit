@@ -45,12 +45,21 @@
                 </NListItem>
               </NList>
 
-              <NButton type="primary" size="large" block @click="startWizard">
-                <template #icon>
-                  <NIcon><PlayOutline /></NIcon>
-                </template>
-                开始向导
-              </NButton>
+              <NSpace vertical>
+                <NButton type="primary" size="large" block @click="startWizard">
+                  <template #icon>
+                    <NIcon><PlayOutline /></NIcon>
+                  </template>
+                  开始向导
+                </NButton>
+
+                <NButton type="warning" size="large" block @click="handleDownloadLicense">
+                  <template #icon>
+                    <NIcon><DownloadOutline /></NIcon>
+                  </template>
+                  测试下载功能
+                </NButton>
+              </NSpace>
             </NSpace>
           </NCard>
         </NSpace>
@@ -105,16 +114,102 @@
         </div>
       </div>
     </div>
+
+    <!-- 下载许可证模态框 -->
+    <NModal
+      v-model:show="showDownloadModal"
+      preset="dialog"
+      title="下载许可证文件"
+      :show-icon="false"
+      style="width: 600px;"
+    >
+      <template #header>
+        <NSpace align="center">
+          <NIcon size="24" :color="'var(--color-primary)'">
+            <DownloadOutline />
+          </NIcon>
+          <NText strong>下载许可证文件</NText>
+        </NSpace>
+      </template>
+
+      <NForm :model="downloadForm" label-placement="left" label-width="120px">
+        <NFormItem label="作者姓名" required>
+          <NInput
+            v-model:value="downloadForm.fullname"
+            placeholder="请输入您的姓名"
+            clearable
+          />
+        </NFormItem>
+
+        <NFormItem label="年份">
+          <NInput
+            v-model:value="downloadForm.year"
+            placeholder="版权年份"
+            clearable
+          />
+        </NFormItem>
+
+        <NFormItem label="项目名称">
+          <NInput
+            v-model:value="downloadForm.project"
+            placeholder="项目或软件名称（可选）"
+            clearable
+          />
+        </NFormItem>
+
+        <NFormItem label="邮箱地址">
+          <NInput
+            v-model:value="downloadForm.email"
+            placeholder="联系邮箱（可选）"
+            clearable
+          />
+        </NFormItem>
+
+        <NFormItem label="组织名称">
+          <NInput
+            v-model:value="downloadForm.organization"
+            placeholder="公司或组织名称（可选）"
+            clearable
+          />
+        </NFormItem>
+
+        <NFormItem label="文件格式">
+          <NSelect
+            v-model:value="downloadForm.filename"
+            :options="fileFormatOptions"
+            placeholder="选择文件格式"
+          />
+        </NFormItem>
+      </NForm>
+
+      <template #action>
+        <NSpace>
+          <NButton @click="cancelDownload">取消</NButton>
+          <NButton
+            type="primary"
+            :disabled="!downloadForm.fullname"
+            @click="confirmDownload"
+          >
+            <template #icon>
+              <NIcon><DownloadOutline /></NIcon>
+            </template>
+            下载
+          </NButton>
+        </NSpace>
+      </template>
+    </NModal>
   </div>
 </template>
 
 <script setup lang="ts">
 import {
-  NSpace, NH1, NP, NCard, NIcon, NText, NList, NListItem, NButton
+  NSpace, NH1, NP, NCard, NIcon, NText, NList, NListItem, NButton,
+  NModal, NForm, NFormItem, NInput, NSelect, NDatePicker
 } from 'naive-ui'
 import {
-  HelpCircleOutline, CheckmarkOutline, PlayOutline
+  HelpCircleOutline, CheckmarkOutline, PlayOutline, DownloadOutline
 } from '@vicons/ionicons5'
+import { ref } from 'vue'
 import { useMessage } from 'naive-ui'
 import type { LicenseScore } from '@/types/wizard.types'
 import { useWizard } from '@/composables/useWizard'
@@ -137,11 +232,30 @@ const {
   previousQuestion,
   goToQuestion,
   completeWizard,
+  downloadLicense,
   resetWizard
 } = useWizard()
 
 // 使用消息提示
 const message = useMessage()
+
+// 下载模态框相关
+const showDownloadModal = ref(false)
+const downloadForm = ref({
+  fullname: '',
+  year: new Date().getFullYear().toString(),
+  project: '',
+  email: '',
+  organization: '',
+  filename: 'LICENSE'
+})
+
+// 文件格式选项
+const fileFormatOptions = [
+  { label: 'LICENSE', value: 'LICENSE' },
+  { label: 'LICENSE.txt', value: 'LICENSE.txt' },
+  { label: 'LICENSE.md', value: 'LICENSE.md' }
+]
 
 // 处理下一步
 const handleNext = () => {
@@ -161,11 +275,83 @@ const handleNext = () => {
 
 // 处理下载许可证
 const handleDownloadLicense = () => {
+  console.log('🔽 handleDownloadLicense 被调用了！')
+  alert('下载功能被触发！')
+
+  try {
+    // 简化的MIT许可证模板
+    const mitTemplate = `MIT License
+
+Copyright (c) 2024 您的姓名
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.`
+
+    // 创建 Blob 对象
+    const blob = new Blob([mitTemplate], { type: 'text/plain;charset=utf-8' })
+
+    // 创建下载链接
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'LICENSE'
+    a.style.display = 'none'
+
+    // 触发下载
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+
+    // 清理 URL 对象
+    URL.revokeObjectURL(url)
+
+    console.log('✅ 下载成功！')
+    message.success('许可证文件下载成功！')
+
+  } catch (error) {
+    console.error('❌ 下载失败:', error)
+    const errorMessage = error instanceof Error ? error.message : '未知错误'
+    message.error(`下载失败: ${errorMessage}`)
+  }
+}
+
+// 确认下载
+const confirmDownload = () => {
   if (state.value.result) {
     const licenseId = state.value.result.recommendations.primary.licenseId
-    // 这里可以实现许可证文件下载逻辑
-    message.info(`正在准备 ${licenseId} 许可证文件下载...`)
+
+    downloadLicense(
+      licenseId,
+      downloadForm.value,
+      (filename) => {
+        message.success(`许可证文件 ${filename} 下载成功！`)
+        showDownloadModal.value = false
+      },
+      (error) => {
+        message.error(`下载失败: ${error.message}`)
+      }
+    )
   }
+}
+
+// 取消下载
+const cancelDownload = () => {
+  showDownloadModal.value = false
 }
 
 // 处理许可证对比

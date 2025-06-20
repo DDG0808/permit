@@ -24,7 +24,7 @@ export const wizardQuestions: WizardQuestion[] = [
           'gpl-3.0': 8,
           'lgpl-3.0': 9,
           'mpl-2.0': 9,
-          'unlicense': 10
+          'unlicense': 7
         }
       },
       {
@@ -109,7 +109,7 @@ export const wizardQuestions: WizardQuestion[] = [
           'gpl-3.0': 0,
           'lgpl-3.0': 3,
           'mpl-2.0': 3,
-          'unlicense': 10
+          'unlicense': 7
         }
       }
     ],
@@ -149,7 +149,7 @@ export const wizardQuestions: WizardQuestion[] = [
           'gpl-3.0': 6,
           'lgpl-3.0': 6,
           'mpl-2.0': 6,
-          'unlicense': 10
+          'unlicense': 7
         }
       }
     ],
@@ -219,7 +219,7 @@ export const wizardQuestions: WizardQuestion[] = [
           'gpl-3.0': 8,
           'lgpl-3.0': 6,
           'mpl-2.0': 5,
-          'unlicense': 10
+          'unlicense': 6
         }
       }
     ],
@@ -244,7 +244,7 @@ export const wizardQuestions: WizardQuestion[] = [
           'gpl-3.0': 2,
           'lgpl-3.0': 3,
           'mpl-2.0': 4,
-          'unlicense': 10
+          'unlicense': 7
         }
       },
       {
@@ -307,14 +307,14 @@ export const wizardQuestions: WizardQuestion[] = [
         label: '否，完全放弃权利',
         description: '将作品完全释放到公有领域',
         weights: {
-          'mit': 2,
-          'apache-2.0': 1,
-          'bsd-3-clause': 1,
-          'bsd-2-clause': 1,
+          'mit': 4,
+          'apache-2.0': 3,
+          'bsd-3-clause': 4,
+          'bsd-2-clause': 4,
           'gpl-3.0': 0,
           'lgpl-3.0': 0,
           'mpl-2.0': 0,
-          'unlicense': 10
+          'unlicense': 6
         }
       }
     ],
@@ -325,7 +325,7 @@ export const wizardQuestions: WizardQuestion[] = [
 export const wizardConfig: WizardConfig = {
   questions: wizardQuestions,
   scoring: {
-    minRecommendationScore: 5,
+    minRecommendationScore: 15,
     maxRecommendations: 3,
     weightingMethod: 'sum'
   },

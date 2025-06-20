@@ -146,7 +146,7 @@ const scrollWidth = computed(() => {
 })
 
 const tableColumns = computed(() => {
-  const columns = [
+  const columns: any[] = [
     {
       title: '特性',
       key: 'feature',

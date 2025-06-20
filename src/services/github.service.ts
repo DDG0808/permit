@@ -33,28 +33,28 @@ const githubApi = axios.create({
  */
 export async function fetchRepoInfo(owner: string, repo: string): Promise<GitHubRepo> {
   try {
-    const response: AxiosResponse<GitHubRepo> = await githubApi.get(`/repos/${owner}/${repo}`)
+    const response: AxiosResponse<any> = await githubApi.get(`/repos/${owner}/${repo}`)
     return {
       id: response.data.id,
       name: response.data.name,
-      fullName: response.data.fullName || `${owner}/${repo}`,
+      fullName: response.data.full_name || `${owner}/${repo}`,
       description: response.data.description,
       url: response.data.url || buildGitHubApiUrl(owner, repo),
-      htmlUrl: response.data.htmlUrl || `https://github.com/${owner}/${repo}`,
+      htmlUrl: response.data.html_url || `https://github.com/${owner}/${repo}`,
       owner: {
         login: response.data.owner?.login || owner,
-        avatarUrl: response.data.owner?.avatarUrl || '',
+        avatarUrl: response.data.owner?.avatar_url || '',
         type: response.data.owner?.type || 'User'
       },
-      isPrivate: response.data.isPrivate || false,
-      isFork: response.data.isFork || false,
+      isPrivate: response.data.private || false,
+      isFork: response.data.fork || false,
       language: response.data.language,
-      stargazersCount: response.data.stargazersCount || 0,
-      forksCount: response.data.forksCount || 0,
+      stargazersCount: response.data.stargazers_count || 0,
+      forksCount: response.data.forks_count || 0,
       size: response.data.size || 0,
-      createdAt: response.data.createdAt || '',
-      updatedAt: response.data.updatedAt || '',
-      pushedAt: response.data.pushedAt || ''
+      createdAt: response.data.created_at || '',
+      updatedAt: response.data.updated_at || '',
+      pushedAt: response.data.pushed_at || ''
     }
   } catch (error) {
     throw handleGitHubApiError(error as AxiosError)
@@ -69,16 +69,35 @@ export async function fetchRepoInfo(owner: string, repo: string): Promise<GitHub
  */
 export async function fetchRepoLicense(owner: string, repo: string): Promise<GitHubRepoLicense | null> {
   try {
-    const response: AxiosResponse<GitHubRepoLicense> = await githubApi.get(`/repos/${owner}/${repo}/license`)
-    return response.data
+    const response: AxiosResponse<any> = await githubApi.get(`/repos/${owner}/${repo}/license`)
+    return {
+      name: response.data.name,
+      path: response.data.path,
+      sha: response.data.sha,
+      size: response.data.size,
+      url: response.data.url,
+      htmlUrl: response.data.html_url,
+      gitUrl: response.data.git_url,
+      downloadUrl: response.data.download_url,
+      type: response.data.type,
+      content: response.data.content,
+      encoding: response.data.encoding,
+      license: {
+        key: response.data.license.key,
+        name: response.data.license.name,
+        spdxId: response.data.license.spdx_id,
+        url: response.data.license.url,
+        nodeId: response.data.license.node_id
+      }
+    }
   } catch (error) {
     const axiosError = error as AxiosError
-    
+
     // 404错误表示没有许可证文件
     if (axiosError.response?.status === 404) {
       return null
     }
-    
+
     throw handleGitHubApiError(axiosError)
   }
 }

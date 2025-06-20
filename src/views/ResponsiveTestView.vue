@@ -113,9 +113,9 @@
             />
           </NFormItem>
           <NFormItem label="邮箱" class="mobile-form-group">
-            <NInput 
-              v-model:value="formData.email" 
-              type="email"
+            <NInput
+              v-model:value="formData.email"
+              type="text"
               placeholder="请输入邮箱"
               class="mobile-form-input"
             />

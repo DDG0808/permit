@@ -244,13 +244,13 @@
             </div>
             <div class="confidence-score">
               <span class="score-label">匹配度</span>
-              <span class="score-value">{{ Math.round(state.result.recommendations.primary.score * 100) }}%</span>
+              <span class="score-value">{{ calculateScorePercentage(state.result.recommendations.primary.score, state.result.scores) }}%</span>
             </div>
           </div>
           
           <div class="recommendation-content">
             <h3 class="license-name">{{ state.result.recommendations.primary.licenseId }} License</h3>
-            <p class="license-summary">{{ state.result.summary }}</p>
+            <p class="license-summary">{{ state.result.recommendations.primary.explanation }}</p>
             
             <!-- 权限概览 -->
             <div class="permissions-grid">
@@ -282,7 +282,7 @@
           
           <!-- 操作按钮 -->
           <div class="recommendation-actions">
-            <button class="action-button primary">
+            <button class="action-button primary" @click="handleDownload">
               <span>下载许可证文件</span>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
@@ -309,9 +309,9 @@
             >
               <div class="alt-header">
                 <span class="alt-name">{{ alt.licenseId }}</span>
-                <span class="alt-score">{{ Math.round(alt.score * 100) }}%</span>
+                <span class="alt-score">{{ calculateScorePercentage(alt.score, state.result.scores) }}%</span>
               </div>
-              <p class="alt-reason">{{ alt.reason }}</p>
+              <p class="alt-reason">{{ alt.explanation }}</p>
             </div>
           </div>
         </div>
@@ -343,7 +343,7 @@ const {
 
 // 计算属性
 const isLastQuestion = computed(() => progress.value.current === totalQuestions.value)
-const hasAnswer = computed(() => currentAnswer.value?.selectedValues.length > 0)
+const hasAnswer = computed(() => (currentAnswer.value?.selectedValues?.length || 0) > 0)
 
 // 选项相关方法
 const isOptionSelected = (value: string) => {
@@ -352,6 +352,61 @@ const isOptionSelected = (value: string) => {
 
 const selectOption = (value: string) => {
   answerQuestion([value])
+}
+
+// 计算正确的百分比
+const calculateScorePercentage = (score: number, allScores: any[]) => {
+  // 动态计算最高分，基于所有推荐结果中的最高分
+  const scores = allScores.map(s => s.score)
+  const maxScore = Math.max(...scores, 60) // 使用实际最高分，最低为60
+
+  // 确保百分比不超过100%
+  const percentage = (score / maxScore) * 100
+  return Math.min(Math.round(percentage), 100)
+}
+
+// 处理下载
+const handleDownload = () => {
+  if (state.value.result) {
+    const licenseId = state.value.result.recommendations.primary.licenseId
+    console.log('🔽 下载许可证:', licenseId)
+
+    // 创建一个简单的许可证文件内容
+    const licenseContent = `${licenseId.toUpperCase()} License
+
+Copyright (c) ${new Date().getFullYear()} [Your Name]
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.`
+
+    // 创建下载
+    const blob = new Blob([licenseContent], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'LICENSE.txt'
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+
+    console.log('✅ 下载完成！')
+  }
 }
 
 // 处理下一步

@@ -270,7 +270,7 @@ export type ResponsiveSpacing = ResponsiveValue<Spacing>
 export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 /** 必需属性类型 */
-export type Required<T, K extends keyof T> = T & Required<Pick<T, K>>
+export type RequiredProps<T, K extends keyof T> = T & Required<Pick<T, K>>
 
 /** 深度部分类型 */
 export type DeepPartial<T> = {
@@ -305,33 +305,5 @@ export interface ModernInputInstance {
 }
 
 // ============================================================================
-// 导出所有类型
+// 所有类型已在上面直接导出，无需重复导出
 // ============================================================================
-
-export type {
-  // 通用类型
-  ComponentSize,
-  ComponentVariant,
-  ComponentState,
-  
-  // 主题类型
-  ThemeMode,
-  ThemeConfig,
-  
-  // 动画类型
-  AnimationType,
-  AnimationDirection,
-  AnimationConfig,
-  
-  // 响应式类型
-  Breakpoint,
-  ResponsiveValue,
-  Spacing,
-  ResponsiveSpacing,
-  
-  // 工具类型
-  Optional,
-  Required,
-  DeepPartial,
-  DeepReadonly
-}

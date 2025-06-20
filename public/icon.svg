@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#007AFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#5AC8FA;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- 圆角方形背景 -->
+  <rect x="0" y="0" width="512" height="512" rx="128" ry="128" fill="url(#iconGradient)"/>
+
+  <!-- 白色星形 - 与header完全一致的四角星 -->
+  <g transform="translate(256,256) scale(21.33,21.33) translate(-12,-9)">
+    <path d="M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z" fill="white" fill-opacity="0.95"/>
+  </g>
+</svg>

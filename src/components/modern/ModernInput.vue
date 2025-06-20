@@ -74,13 +74,13 @@
     
     <!-- 字符计数 -->
     <div v-if="showCount && maxlength" class="modern-input-count">
-      {{ modelValue?.length || 0 }} / {{ maxlength }}
+      {{ String(modelValue || '').length }} / {{ maxlength }}
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, nextTick } from 'vue'
+import { computed, ref, nextTick, useSlots } from 'vue'
 import type { ModernInputSize, ModernInputVariant } from '@/types/modern.types'
 
 // 图标组件（简化版，实际项目中应该使用图标库）
@@ -133,6 +133,7 @@ const emit = defineEmits<{
 const inputRef = ref<HTMLInputElement>()
 const focused = ref(false)
 const passwordVisible = ref(false)
+const slots = useSlots()
 
 // 计算属性
 const inputId = computed(() => `modern-input-${Math.random().toString(36).substr(2, 9)}`)
@@ -157,8 +158,8 @@ const wrapperClasses = computed(() => [
     'modern-input-wrapper--disabled': props.disabled,
     'modern-input-wrapper--readonly': props.readonly,
     'modern-input-wrapper--error': props.errorMessage,
-    'modern-input-wrapper--has-prefix': props.prefixIcon || props.$slots?.prefix,
-    'modern-input-wrapper--has-suffix': props.suffixIcon || props.$slots?.suffix || props.clearable || showPasswordToggle.value
+    'modern-input-wrapper--has-prefix': props.prefixIcon || slots.prefix,
+    'modern-input-wrapper--has-suffix': props.suffixIcon || slots.suffix || props.clearable || showPasswordToggle.value
   }
 ])
 

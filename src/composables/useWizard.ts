@@ -3,16 +3,18 @@
  */
 
 import { ref, computed, type Ref } from 'vue'
-import type { 
-  WizardQuestion, 
-  WizardAnswer, 
-  WizardResult, 
-  WizardState, 
+import type {
+  WizardQuestion,
+  WizardAnswer,
+  WizardResult,
+  WizardState,
   WizardProgress,
-  LicenseScore 
+  LicenseScore
 } from '@/types/wizard.types'
+import type { LicenseGenerationParams } from '@/types/license.types'
 import { wizardQuestions, wizardConfig } from '@/data/questions.data'
 import { licenses, getLicenseById } from '@/data/licenses.data'
+import { downloadLicenseFile, validateLicenseParams } from '@/services/license-generator.service'
 
 /**
  * 许可证选择向导组合式函数
@@ -293,6 +295,59 @@ export function useWizard() {
   }
 
   /**
+   * 下载许可证文件
+   * @param licenseId - 许可证ID
+   * @param userInfo - 用户信息
+   * @param onSuccess - 成功回调
+   * @param onError - 错误回调
+   */
+  const downloadLicense = (
+    licenseId: string,
+    userInfo: {
+      fullname?: string
+      year?: string
+      project?: string
+      email?: string
+      organization?: string
+      filename?: string
+    },
+    onSuccess?: (filename: string) => void,
+    onError?: (error: Error) => void
+  ): void => {
+    try {
+      // 准备生成参数
+      const params: LicenseGenerationParams = {
+        licenseId,
+        year: userInfo.year || new Date().getFullYear().toString(),
+        fullname: userInfo.fullname || '',
+        project: userInfo.project || '',
+        email: userInfo.email || '',
+        organization: userInfo.organization || '',
+        filename: userInfo.filename || 'LICENSE'
+      }
+
+      // 验证参数
+      const validation = validateLicenseParams(params)
+      if (!validation.isValid) {
+        throw new Error(`参数验证失败: ${validation.errors.join(', ')}`)
+      }
+
+      // 下载文件
+      downloadLicenseFile(
+        params,
+        (filename) => {
+          onSuccess?.(filename)
+        },
+        (error) => {
+          onError?.(error)
+        }
+      )
+    } catch (error) {
+      onError?.(error as Error)
+    }
+  }
+
+  /**
    * 重置向导
    */
   const resetWizard = (): void => {
@@ -327,6 +382,7 @@ export function useWizard() {
     previousQuestion,
     goToQuestion,
     completeWizard,
+    downloadLicense,
     resetWizard
   }
 }

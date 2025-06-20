@@ -97,7 +97,10 @@ export class PerformanceMonitor {
         const fidObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries()
           entries.forEach((entry) => {
-            this.metrics.firstInputDelay = entry.processingStart - entry.startTime
+            const fidEntry = entry as any
+            if (fidEntry.processingStart) {
+              this.metrics.firstInputDelay = fidEntry.processingStart - entry.startTime
+            }
           })
         })
         fidObserver.observe({ entryTypes: ['first-input'] })

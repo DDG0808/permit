@@ -65,7 +65,7 @@ export type {
   
   // 工具类型
   Optional,
-  Required,
+  RequiredProps,
   DeepPartial,
   DeepReadonly
 } from '@/types/modern.types'
@@ -82,10 +82,10 @@ export {
 }
 
 // ============================================================================
-// 默认导出（组件库对象）
+// 组件库对象
 // ============================================================================
 
-export default {
+const ModernUIComponents = {
   ModernButton,
   ModernCard,
   GlassPanel,
@@ -159,7 +159,7 @@ export const description = '基于Apple Design Award设计趋势的现代化Vue�
  * @param size 尺寸值
  * @returns 是否有效
  */
-export function isValidSize(size: string): size is ComponentSize {
+export function isValidSize(size: string): size is import('@/types/modern.types').ComponentSize {
   return ['small', 'medium', 'large'].includes(size)
 }
 
@@ -168,7 +168,7 @@ export function isValidSize(size: string): size is ComponentSize {
  * @param variant 变体值
  * @returns 是否有效
  */
-export function isValidVariant(variant: string): variant is ComponentVariant {
+export function isValidVariant(variant: string): variant is import('@/types/modern.types').ComponentVariant {
   return ['default', 'primary', 'secondary', 'success', 'warning', 'error'].includes(variant)
 }
 
@@ -182,8 +182,8 @@ export function isValidVariant(variant: string): variant is ComponentVariant {
  */
 export function getComponentClasses(
   component: string,
-  variant?: ComponentVariant,
-  size?: ComponentSize,
+  variant?: import('@/types/modern.types').ComponentVariant,
+  size?: import('@/types/modern.types').ComponentSize,
   modifiers?: Record<string, boolean>
 ): string[] {
   const classes = [`modern-${component}`]
@@ -214,26 +214,27 @@ export function getComponentClasses(
  * @returns 处理后的值
  */
 export function createResponsiveValue<T>(
-  value: ResponsiveValue<T>,
-  breakpoints: Record<Breakpoint, number>
+  value: import('@/types/modern.types').ResponsiveValue<T>,
+  breakpoints: Record<import('@/types/modern.types').Breakpoint, number>
 ): T {
   if (typeof value === 'object' && value !== null) {
     // 根据当前屏幕宽度返回对应的值
     const width = window.innerWidth
     const sortedBreakpoints = Object.entries(breakpoints)
       .sort(([, a], [, b]) => b - a)
-    
+
     for (const [breakpoint, minWidth] of sortedBreakpoints) {
-      if (width >= minWidth && value[breakpoint as Breakpoint] !== undefined) {
-        return value[breakpoint as Breakpoint] as T
+      const breakpointKey = breakpoint as keyof typeof value
+      if (width >= minWidth && value[breakpointKey] !== undefined) {
+        return value[breakpointKey] as T
       }
     }
-    
+
     // 返回默认值（最小断点的值）
-    const defaultBreakpoint = sortedBreakpoints[sortedBreakpoints.length - 1][0] as Breakpoint
+    const defaultBreakpoint = sortedBreakpoints[sortedBreakpoints.length - 1][0] as keyof typeof value
     return value[defaultBreakpoint] as T
   }
-  
+
   return value as T
 }
 
@@ -296,5 +297,5 @@ export const ModernUI = {
   description
 }
 
-// 支持直接使用app.use(ModernUI)
-export { ModernUI as default }
+// 默认导出
+export default ModernUI

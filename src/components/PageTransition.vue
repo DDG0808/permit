@@ -77,11 +77,9 @@ const onBeforeEnter = (el: Element) => {
 
 const onEnter = (el: Element, done: () => void) => {
   emit('enter', el, done)
-  
-  // 如果没有自定义处理，使用默认行为
-  if (!emit.enter) {
-    setTimeout(done, props.duration)
-  }
+
+  // 使用默认行为
+  setTimeout(done, props.duration)
 }
 
 const onAfterEnter = (el: Element) => {
@@ -94,11 +92,9 @@ const onBeforeLeave = (el: Element) => {
 
 const onLeave = (el: Element, done: () => void) => {
   emit('leave', el, done)
-  
-  // 如果没有自定义处理，使用默认行为
-  if (!emit.leave) {
-    setTimeout(done, props.duration)
-  }
+
+  // 使用默认行为
+  setTimeout(done, props.duration)
 }
 
 const onAfterLeave = (el: Element) => {

@@ -73,3 +73,42 @@ export interface LicenseFilter {
     max: number
   }
 }
+
+// 许可证模板占位符类型
+export type LicensePlaceholder =
+  | 'year'          // 年份
+  | 'fullname'      // 完整姓名
+  | 'project'       // 项目名称
+  | 'description'   // 项目描述
+  | 'email'         // 邮箱地址
+  | 'organization'  // 组织名称
+
+// 许可证模板接口
+export interface LicenseTemplate {
+  id: string                    // 许可证ID，与License.id对应
+  name: string                  // 许可证名称
+  content: string               // 许可证文本模板
+  placeholders: LicensePlaceholder[]  // 支持的占位符列表
+  defaultFilename: string       // 默认文件名
+  encoding: string              // 文件编码
+}
+
+// 许可证生成参数
+export interface LicenseGenerationParams {
+  licenseId: string
+  year?: string
+  fullname?: string
+  project?: string
+  description?: string
+  email?: string
+  organization?: string
+  filename?: string
+}
+
+// 许可证生成结果
+export interface LicenseGenerationResult {
+  content: string
+  filename: string
+  mimeType: string
+  encoding: string
+}
